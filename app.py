@@ -149,7 +149,7 @@ st.markdown("""
 
 
 # ----------------- Streamlit UI -----------------
-st.title("🧠 Image Classification with Attention Map")
+st.title("🧠 Image Classification with Attention Map!")
 st.caption("อัปโหลดภาพ X-ray ปอดเพื่อดูการวิเคราะห์และความสนใจของโมเดล")
 
 uploaded_file = st.file_uploader("📁 เลือกภาพ JPG/PNG", type=["jpg", "jpeg", "png"])
