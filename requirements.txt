@@ -2,5 +2,5 @@ torch
 streamlit
 numpy
 matplotlib
-torchvisiom
+torchvision
 Pillow
