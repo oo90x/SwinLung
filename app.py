@@ -115,24 +115,29 @@ def image_to_base64(image):
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai&display=swap');
+
     html, body, [class*="css"]  {
         font-family: 'IBM Plex Sans Thai', sans-serif;
         background-color: #f9f9fb;
         color: #1e1e1e;
     }
+
     .stButton button {
-        background-color: #2a4365;
+        background-color: #ff4b4b;
         color: white;
         padding: 0.6em 1.2em;
         border-radius: 25px;
         border: none;
-        transition: 0.3s ease-in-out;
+        margin-top: 25px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
         font-weight: bold;
     }
+
     .stButton button:hover {
-        background-color: #1a365d;
-        transform: scale(1.02);
+        background-color: #4CAF50; /* สีเขียวตอน hover */
+        transform: scale(1.03);
     }
+
     .uploaded-img {
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.1);
