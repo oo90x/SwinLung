@@ -118,7 +118,7 @@ st.markdown("""
 
     html, body, [class*="css"]  {
         font-family: 'IBM Plex Sans Thai', sans-serif;
-        background-color: #f9f9fb;
+        background-color: ##ffffe3;
         color: #1e1e1e;
     }
 
