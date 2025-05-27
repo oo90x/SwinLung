@@ -8,11 +8,108 @@ import numpy as np
 import io
 import torch.nn as nn
 
+# ---- CUSTOM CSS STYLE ----
+st.markdown(
+    """
+    <style>
+    /* Background and font */
+    .main {
+        background-color: #f9fafb;
+        color: #111827;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Title */
+    h1 {
+        font-weight: 700;
+        color: #111827;
+        letter-spacing: 1.2px;
+        margin-bottom: 0.1rem;
+    }
+
+    /* Subtitle */
+    .subtitle {
+        font-weight: 400;
+        font-size: 1rem;
+        color: #6b7280;
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+    }
+
+    /* File uploader */
+    div.stFileUploader > label {
+        font-weight: 600;
+        color: #2563eb;
+    }
+
+    /* Button */
+    div.stButton > button {
+        background-color: #2563eb;
+        color: white;
+        font-weight: 600;
+        padding: 0.5rem 1.3rem;
+        border-radius: 6px;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+    div.stButton > button:hover {
+        background-color: #1e40af;
+        cursor: pointer;
+    }
+
+    /* Prediction output box */
+    .prediction {
+        background: #e0e7ff;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        margin-top: 1rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #3730a3;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Warning box */
+    .warning {
+        background: #fee2e2;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        margin-top: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #b91c1c;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3);
+    }
+
+    /* Image border */
+    .uploaded-image {
+        border-radius: 12px;
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+    }
+
+    /* Matplotlib figure */
+    .stPyplot > div {
+        display: flex;
+        justify-content: center;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ---- CONFIG ----
 MODEL_PATH = "swinLung.pth"
 IMG_SIZE = 224
 HEAD = 0
 TOKEN_INDEX = 1300  # index ของ token ที่จะดู attention ไปทุกตำแหน่ง
+
+# --- Class definitions (WindowAttention, SwinBlock, MiniSwinTransformer) ---
 
 class WindowAttention(nn.Module):
     def __init__(self, dim, num_heads):
@@ -27,14 +124,14 @@ class WindowAttention(nn.Module):
     def forward(self, x):
         B, N, C = x.shape
         qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
-        q, k, v = qkv[0], qkv[1], qkv[2]  # each: [B, heads, N, C//heads]
+        q, k, v = qkv[0], qkv[1], qkv[2]
 
         attn = (q @ k.transpose(-2, -1)) * self.scale
         attn = attn.softmax(dim=-1)
         self.attn_map = attn.detach().cpu()
 
-        out = attn @ v  # [B, heads, N, C//heads]
-        out = out.transpose(1, 2).reshape(B, N, C)  # [B, N, C]
+        out = attn @ v
+        out = out.transpose(1, 2).reshape(B, N, C)
         return self.proj(out)
 
 class SwinBlock(nn.Module):
@@ -70,8 +167,8 @@ class MiniSwinTransformer(nn.Module):
 
     def forward(self, x):
         B = x.shape[0]
-        x = self.patch_embed(x)  # [B, C, H/patch, W/patch]
-        x = x.flatten(2).transpose(1, 2)  # [B, N, C]
+        x = self.patch_embed(x)
+        x = x.flatten(2).transpose(1, 2)
         x = x + self.pos_embed
 
         x = self.blocks(x)
@@ -85,13 +182,13 @@ class MiniSwinTransformer(nn.Module):
 # ---- Load model ----
 @st.cache_resource
 def load_model():
-    model = MiniSwinTransformer()  # สร้างโมเดล
-    state_dict = torch.load('swinLung.pth', map_location=torch.device('cpu'))
-    model.load_state_dict(state_dict)  # โหลด weights
-    model.eval()  # ตั้งให้โมเดลทำงานใน evaluation mode
+    model = MiniSwinTransformer()
+    state_dict = torch.load(MODEL_PATH, map_location=torch.device('cpu'))
+    model.load_state_dict(state_dict)
+    model.eval()
     return model
 
-# ---- ดึง attention map จากชั้น WindowAttention ล่าสุด ----
+# ---- ดึง attention map ----
 def get_last_attn_map(model):
     for module in reversed(list(model.modules())):
         if hasattr(module, 'attn_map') and module.attn_map is not None:
@@ -107,26 +204,27 @@ def preprocess_image(image):
     ])
     return transform(image).unsqueeze(0)
 
-# ---- แสดง Attention Map เป็นรูป ----
+# ---- Plot Attention Map ----
 def plot_attention(attn_map, head=0, token_index=TOKEN_INDEX):
-    mat = attn_map[0, head]  # (N, N)
-    token_attn = mat[token_index].reshape(56, 56)  # (56x56) ขึ้นกับ patch ของคุณ
-    fig, ax = plt.subplots()
+    mat = attn_map[0, head]
+    token_attn = mat[token_index].reshape(56, 56)
+    fig, ax = plt.subplots(figsize=(5,5))
     cax = ax.imshow(token_attn, cmap='jet')
-    ax.set_title(f"Attention Head {head} – Token {token_index}")
+    ax.set_title(f"Attention Head {head} – Token {token_index}", fontsize=14, weight='bold')
     ax.axis('off')
-    fig.colorbar(cax)
+    fig.colorbar(cax, fraction=0.046, pad=0.04)
+    plt.tight_layout()
     return fig
 
 # ---- Streamlit App ----
 st.title("🧠 Image Classification with Attention Map")
-st.write("Upload an image and see the predicted class with its attention map.")
+st.markdown('<p class="subtitle">Upload an image and see the predicted class with its attention map.</p>', unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", use_container_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True, classes="uploaded-image")
 
     if st.button("🔍 Predict"):
         with st.spinner("Predicting..."):
@@ -136,18 +234,19 @@ if uploaded_file:
                 logits = model(input_tensor)
                 pred_class = logits.argmax(dim=1).item()
                 attn_map = get_last_attn_map(model)
-        if pred_class==0:
-            prediction = "COVID-19"
-        elif pred_class==1:
-            prediction = "Lung Opacity"
-        elif pred_class==2:
-            prediction = "Normal"
-        elif pred_class==3:
-            prediction = "Viral Pneumonia"
-        st.success(f"✅ **Predicted Class:** {prediction}")
+
+        class_names = {
+            0: "COVID-19",
+            1: "Lung Opacity",
+            2: "Normal",
+            3: "Viral Pneumonia"
+        }
+        prediction = class_names.get(pred_class, "Unknown")
+
+        st.markdown(f'<div class="prediction">✅ Predicted Class: {prediction}</div>', unsafe_allow_html=True)
 
         if attn_map is not None:
             fig = plot_attention(attn_map, head=HEAD)
             st.pyplot(fig)
         else:
-            st.warning("⚠️ No attention map found in model.")
+            st.markdown('<div class="warning">⚠️ No attention map found in model.</div>', unsafe_allow_html=True)
