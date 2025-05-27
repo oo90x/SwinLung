@@ -123,8 +123,8 @@ st.markdown("""
     }
 
     .stButton button {
-        background-color: #ff4b4b;
-        color: white;
+        background-color: #ff4b4b;     /* พื้นแดง */
+        color: white !important;       /* ตัวอักษรสีขาว */
         padding: 0.6em 1.2em;
         border-radius: 25px;
         border: none;
@@ -134,7 +134,8 @@ st.markdown("""
     }
 
     .stButton button:hover {
-        background-color: #4CAF50; /* สีเขียวตอน hover */
+        background-color: #4CAF50;     /* เปลี่ยนเป็นเขียว */
+        color: white !important;       /* ให้ยังเป็นสีขาวตอน hover */
         transform: scale(1.03);
     }
 
@@ -145,6 +146,7 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 # ----------------- Streamlit UI -----------------
 st.title("🧠 Image Classification with Attention Map")
