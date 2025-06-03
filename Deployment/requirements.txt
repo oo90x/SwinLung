@@ -3,9 +3,4 @@ streamlit
 numpy
 matplotlib
 torchvision
-Pillowtorch
-streamlit
-numpy
-matplotlib
-torchvision
 Pillow
