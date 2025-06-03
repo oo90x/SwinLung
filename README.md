@@ -11,4 +11,4 @@ I have written a blog post about this project on Medium.
 For futhermore information you can check it out [here](https://medium.com/@chaichanok05/swinlung-swin-transformer-lung-diseases-classification-model-on-chest-radiograph-4bb4f0cea938).
 
 ## Deployment
-This project has been deployed on streamlit cloud. You can access it through [here]()
+This project has been deployed on streamlit cloud. You can access it through [here](https://swinlung-annbjm5nov3ca8bj3ctmgc.streamlit.app/)
