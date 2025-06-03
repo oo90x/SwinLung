@@ -12,7 +12,6 @@ import urllib.request
 
 # ---- CONFIG ----
 MODEL_PATH = "swinLung.pth"
-MODEL_URL = "https://github.com/oo90x/SwinLung/blob/main/Model/swinLung.pth"
 IMG_SIZE = 224
 HEAD = 0
 TOKEN_INDEX = 1300
@@ -81,8 +80,6 @@ class MiniSwinTransformer(nn.Module):
 @st.cache_resource
 
 def load_model():
-    if not os.path.exists(MODEL_PATH):
-        urllib.request.urlretrieve(MODEL_URL, MODEL_PATH)
     model = MiniSwinTransformer()
     model.load_state_dict(torch.load(MODEL_PATH, map_location="cpu"))
     model.eval()
