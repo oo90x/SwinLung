@@ -11,7 +11,7 @@ import os
 import urllib.request
 
 # ---- CONFIG ----
-MODEL_PATH = "swinLung.pth"
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "swinLung.pth")
 IMG_SIZE = 224
 HEAD = 0
 TOKEN_INDEX = 1300
