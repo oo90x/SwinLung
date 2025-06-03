@@ -1,6 +1,8 @@
 # Lung Diseases Classification model on Chest Radiograph.
-This project aims to classify 3 lung diseases from chest radiograph using swin transformer. This project was developed by Chaichanok Angchanpehn from AI-Builders: Majestic-eagles.
-![Example of prediction result](Pics/test00.jpeg)
+This project aims to classify 3 lung diseases from chest radiograph using swin transformer. 
+This project was developed by Chaichanok Angchanphen from AI-Builders: Majestic-eagles.
+
+<img src="Pics/test00.jpeg" alt="Example of prediction result" width="400"/>
 
 ## How to Use
 To get started, install the required dependencies by simply running these following commands:
