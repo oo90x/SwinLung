@@ -4,7 +4,7 @@ This project was developed by Chaichanok Angchanphen from AI-Builders: Majestic-
 
 <p align="center">
   <img src="Pics/test00.jpeg" alt="Example of prediction result" width="400"/>
-  <h5>Example of Lung Radiograph pic</h5>
+  <h5 align="center">Example of Lung Radiograph pic</h5>
 </p>
 
 ## How to Use
