@@ -126,7 +126,7 @@ st.markdown("""
     }
 
     div.stButton > button {
-        background-color: #ff4b4b;     /* พื้นแดง */
+        background-color: #5160df;     /* พื้นฟ้า */
         color: white !important;       /* ตัวอักษรสีขาว */
         padding: 1em 2em;
         font-size: 50px;
