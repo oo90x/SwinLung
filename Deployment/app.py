@@ -129,7 +129,7 @@ st.markdown("""
         background-color: #ff4b4b;     /* พื้นแดง */
         color: white !important;       /* ตัวอักษรสีขาว */
         padding: 1em 2em;
-        font-size: 20px;
+        font-size: 25px;
         border-radius: 30px;
         border: none;
         margin-top: 25px;
@@ -147,10 +147,17 @@ st.markdown("""
         transform: scale(1.03);
     }
 
+    .centered-img {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
     .uploaded-img {
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         max-width: 100%;
+        height: auto;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -189,8 +196,12 @@ if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
     image_base64 = image_to_base64(image)
     st.markdown(
-        f'<img src="data:image/png;base64,{image_base64}" class="uploaded-img" alt="Uploaded Image" />',
-        unsafe_allow_html=True
+    f'''
+    <div class="centered-img">
+        <img src="data:image/png;base64,{image_base64}" class="uploaded-img" alt="Uploaded Image" />
+    </div>
+    ''',
+    unsafe_allow_html=True
     )
 
     if st.button("🔍 ทำนายผล"):
