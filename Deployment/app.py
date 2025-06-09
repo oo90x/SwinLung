@@ -129,7 +129,7 @@ st.markdown("""
         background-color: #ff4b4b;     /* พื้นแดง */
         color: white !important;       /* ตัวอักษรสีขาว */
         padding: 1em 2em;
-        font-size: 25px;
+        font-size: 50px;
         border-radius: 30px;
         border: none;
         margin-top: 25px;
