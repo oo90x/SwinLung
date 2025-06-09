@@ -129,8 +129,8 @@ st.markdown("""
         background-color: #5160df;     /* พื้นฟ้า */
         color: white !important;       /* ตัวอักษรสีขาว */
         padding: 1em 2em;
-        font-size: 50px;
-        border-radius: 30px;
+        font-size: 25px;
+        border-radius: 25px;
         border: none;
         margin-top: 25px;
         transition: background-color 0.3s ease, transform 0.2s ease;
