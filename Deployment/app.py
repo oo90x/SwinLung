@@ -155,7 +155,29 @@ st.markdown("""
 st.title("🧠 Image Classification with Attention Map")
 st.caption("อัปโหลดภาพ X-ray ปอดเพื่อดูการวิเคราะห์และความสนใจของโมเดล")
 
-uploaded_file = st.file_uploader("📁 เลือกภาพ JPG/PNG", type=["jpg", "jpeg", "png"])
+# ----------------- ตัวอย่างภาพ -----------------
+SAMPLE_IMAGES = {
+    "ตัวอย่างที่ 1": "https://raw.githubusercontent.com/oo90x/swinLung/main/Pics/Samples/sample00.jpg",
+    "ตัวอย่างที่ 2": "https://raw.githubusercontent.com/oo90x/swinLung/main/Pics/Samples/sample01.png",
+    "ตัวอย่างที่ 3": "https://raw.githubusercontent.com/oo90x/swinLung/main/Pics/Samples/sample02.png",
+    "ตัวอย่างที่ 4": "https://raw.githubusercontent.com/oo90x/swinLung/main/Pics/Samples/sample03.png",
+    "ตัวอย่างที่ 5": "https://raw.githubusercontent.com/oo90x/swinLung/main/Pics/Samples/sample04.png",
+}
+
+use_sample = st.checkbox("✅ ใช้ภาพตัวอย่าง")
+
+if use_sample:
+    sample_choice = st.selectbox("เลือกภาพตัวอย่าง", list(SAMPLE_IMAGES.keys()))
+    sample_url = SAMPLE_IMAGES[sample_choice]
+    
+    try:
+        with urllib.request.urlopen(sample_url) as response:
+            uploaded_file = io.BytesIO(response.read())
+    except Exception as e:
+        st.error(f"ไม่สามารถโหลดภาพตัวอย่างได้: {e}")
+        uploaded_file = None
+else:
+    uploaded_file = st.file_uploader("📁 เลือกภาพ JPG/PNG", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
     image = Image.open(uploaded_file).convert("RGB")
