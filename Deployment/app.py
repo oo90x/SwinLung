@@ -125,18 +125,23 @@ st.markdown("""
         color: #1e1e1e;
     }
 
-    .stButton button {
+    div.stButton > button {
         background-color: #ff4b4b;     /* พื้นแดง */
         color: white !important;       /* ตัวอักษรสีขาว */
-        padding: 0.6em 1.2em;
-        border-radius: 25px;
+        padding: 1em 2em;
+        font-size: 20px;
+        border-radius: 30px;
         border: none;
         margin-top: 25px;
         transition: background-color 0.3s ease, transform 0.2s ease;
         font-weight: bold;
+        min-width: 200px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    .stButton button:hover {
+    div.stButton > button:hover {
         background-color: #4CAF50;     /* เปลี่ยนเป็นเขียว */
         color: white !important;       /* ให้ยังเป็นสีขาวตอน hover */
         transform: scale(1.03);
@@ -152,8 +157,9 @@ st.markdown("""
 
 
 # ----------------- Streamlit UI -----------------
-st.title("🧠 Image Classification with Attention Map")
-st.caption("อัปโหลดภาพ X-ray ปอดเพื่อดูการวิเคราะห์และความสนใจของโมเดล")
+st.title("🫁 Radiography Classification with Attention map!")
+st.caption("Upload a radiography you want to predict and plot attention map.")
+st.caption("อัปโหลดภาพถ่ายรังสีทรวงอกเพื่อดูการวิเคราะห์และความสนใจของโมเดล")
 
 # ----------------- ตัวอย่างภาพ -----------------
 SAMPLE_IMAGES = {
@@ -164,10 +170,10 @@ SAMPLE_IMAGES = {
     "ตัวอย่างที่ 5": "https://raw.githubusercontent.com/oo90x/swinLung/main/Pics/Samples/sample04.png",
 }
 
-use_sample = st.checkbox("✅ ใช้ภาพตัวอย่าง")
+use_sample = st.checkbox("Use sample images(ใช้ภาพตัวอย่าง) :หากต้องการทดสอบจากภาพตัวอย่างกรณีกด ✅ และหากประสงค์จะใช้ภาพที่นำมาเองกรุณานำ ✅ ออก")
 
 if use_sample:
-    sample_choice = st.selectbox("เลือกภาพตัวอย่าง", list(SAMPLE_IMAGES.keys()))
+    sample_choice = st.selectbox("Choose a sample(เลือกภาพตัวอย่าง)", list(SAMPLE_IMAGES.keys()))
     sample_url = SAMPLE_IMAGES[sample_choice]
     
     try:
